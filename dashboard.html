@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#2f9bff" />
+  <meta name="description" content="Ti Includo: dizionario di inclusività, diario personale, quiz e news in italiano. Offline-first." />
+  <link rel="manifest" href="./manifest.webmanifest" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="./styles.css?v=<?= time(); ?>" />
+  <title>Ti Includo — Dashboard</title>
+</head>
+<body>
+  <a class="skip-link" href="#main">Salta al contenuto</a>
+
+  <header class="topbar" role="banner">
+    <div class="brand">
+      <div class="logo" aria-hidden="true"><span class="logo-dot"></span></div>
+      <div>
+        <h1 class="brand-title">Ti Includo ✨</h1>
+        <p class="brand-subtitle">Inclusività • imparare insieme • offline-ready 📦</p>
+      </div>
+    </div>
+
+    <div class="topbar-right">
+      <div class="status" aria-live="polite">
+        <span class="status-pill" id="netPill">Online</span>
+      </div>
+      <button class="icon-btn" id="openSettingsBtn" type="button" aria-label="Apri scorciatoie">⚙️</button>
+    </div>
+  </header>
+
+  <nav class="nav" aria-label="Navigazione principale">
+    <button class="nav-item is-active" data-view="home" type="button">🏠 Home</button>
+    <button class="nav-item" data-view="dictionary" type="button">📚 Dizionario</button>
+    <button class="nav-item" data-view="diary" type="button">📝 Diario</button>
+    <button class="nav-item" data-view="quiz" type="button">🎮 Quiz</button>
+    <button class="nav-item" data-view="news" type="button">📰 News</button>
+    <button class="nav-item" data-view="plus" type="button">💎 Plus</button>
+    <button class="nav-item" data-view="favorites" type="button">⭐ Preferiti</button>
+  </nav>
+
+  <main id="main" class="main" role="main">
+
+    <!-- HOME -->
+    <section class="view is-active" id="view-home" data-view="home" aria-labelledby="homeTitle">
+      <div class="hero">
+        <div class="hero-content">
+          <h2 class="hero-title" id="homeTitle">Un posto sicuro per imparare e agire 🤝</h2>
+          <p class="hero-text justify">
+            Dizionario 📚, diario 📝 e quiz 🎯. News 📰 quando vuoi. Offline-first ✅
+          </p>
+
+          <div class="hero-actions">
+            <a class="btn primary" href="#dictionary" data-jump="dictionary">Apri dizionario 📚</a>
+            <button class="btn" type="button" data-start-quiz>Fai il quiz 🎮</button>
+            <button class="btn" type="button" data-refresh-news>Scaping news 🧭</button>
+          </div>
+
+          <div class="quick-stats" role="group" aria-label="Punteggio e stato">
+            <div class="card stat">
+              <p class="stat-label">Punteggio inclusività 🌈</p>
+              <div class="stat-value">
+                <span id="scoreValue">—</span>
+                <span class="stat-unit">/100</span>
+              </div>
+              <p class="stat-hint" id="scoreHint">Completa il quiz per vedere il tuo punteggio.</p>
+            </div>
+
+            <div class="card stat">
+              <p class="stat-label">Modalità offline 📴</p>
+              <p class="stat-hint">Toggle qui (non nelle news) ✅</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-art" aria-hidden="true">
+          <div class="art-grid">
+            <div class="art-tile t1"></div>
+            <div class="art-tile t2"></div>
+            <div class="art-tile t3"></div>
+            <div class="art-tile t4"></div>
+          </div>
+          <p class="art-caption">Ti Includo • offline-first 🧡</p>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <article class="card">
+          <h3>Toggle online/offline 📴</h3>
+          <p class="muted justify">
+            Serve per testare come funziona l’app senza rete.
+          </p>
+          <div class="row">
+            <button class="btn" type="button" id="toggleOfflineBtn">Simula offline (toggle) ⛔↩️</button>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>Promemoria inclusivo 🫶</h3>
+          <p class="justify muted">
+            L’inclusività è ascoltare, adattare e costruire contesti in cui più persone possano partecipare. 🌿
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- DICTIONARY -->
+    <section class="view" id="view-dictionary" data-view="dictionary" aria-labelledby="dictTitle">
+      <div class="view-header">
+        <div>
+          <h2 id="dictTitle">Dizionario di inclusività 📚</h2>
+          <p class="muted">Cerca termini in italiano e salva preferiti ⭐</p>
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <label class="field">
+          <span class="field-label">Cerca</span>
+          <input id="dictSearch" type="search" inputmode="search" placeholder="Es. accessibilità, pregiudizio..." autocomplete="off" />
+        </label>
+
+        <label class="field">
+          <span class="field-label">Categoria</span>
+          <select id="dictCategory"><option value="tutte">Tutte</option></select>
+        </label>
+
+        <button class="btn" type="button" id="dictResetBtn">Reset ♻️</button>
+      </div>
+
+      <div class="dict-layout">
+        <aside class="card dict-sidebar" aria-label="Risultati ricerca">
+          <div class="sidebar-head">
+            <p class="muted">Risultati</p>
+            <p class="muted" id="dictCount">0 termini</p>
+          </div>
+          <ul class="list" id="dictResults" role="list"></ul>
+        </aside>
+
+        <article class="card dict-detail" aria-live="polite">
+          <div id="dictEmpty" class="empty-state">
+            <h3>Nessun termine selezionato</h3>
+            <p class="muted">Cerca a sinistra per vedere definizioni ed esempi. ✍️</p>
+          </div>
+
+          <div id="dictDetail" class="detail" hidden>
+            <div class="detail-top">
+              <div>
+                <h3 id="dictTermTitle">—</h3>
+                <p class="detail-meta" id="dictTermMeta">—</p>
+              </div>
+              <button class="icon-btn" id="favoriteBtn" type="button" aria-label="Salva nei preferiti">⭐</button>
+            </div>
+
+            <p class="justify" id="dictTermDef"></p>
+
+            <div class="detail-section">
+              <h4>Esempi 🧾</h4>
+              <ul class="bullets" id="dictExamples"></ul>
+            </div>
+
+            <div class="detail-section">
+              <h4>Quando usarlo 🗺️</h4>
+              <p class="justify" id="dictWhen"></p>
+            </div>
+
+            <div class="detail-section">
+              <h4>Sinonimi / Idee correlate 🔁</h4>
+              <p class="tags" id="dictSynonyms"></p>
+            </div>
+
+            <div class="detail-actions">
+              <button class="btn primary" type="button" id="copyBtn">Copia definizione 📋</button>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- DIARY -->
+    <section class="view" id="view-diary" data-view="diary" aria-labelledby="diaryTitle">
+      <div class="view-header">
+        <div>
+          <h2 id="diaryTitle">Diario personale 📝</h2>
+          <p class="muted">Scrivi, salva e rileggi: offline (localStorage). 📦</p>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <article class="card">
+          <h3>Nuova voce ✍️</h3>
+
+          <label class="field">
+            <span class="field-label">Data</span>
+            <input id="diaryDate" type="date" />
+          </label>
+
+          <label class="field">
+            <span class="field-label">Titolo (opzionale)</span>
+            <input id="diaryTitle" type="text" placeholder="Es. Una conversazione più gentile" maxlength="80" />
+          </label>
+
+          <label class="field">
+            <span class="field-label">Testo</span>
+            <textarea id="diaryText" rows="10" placeholder="Cosa hai imparato? Cosa farai diversamente?" maxlength="5000"></textarea>
+          </label>
+
+          <div class="row">
+            <button class="btn primary" type="button" id="saveDiaryBtn">Salva ✅</button>
+            <button class="btn" type="button" id="clearDiaryBtn">Svuota 🧹</button>
+            <button class="btn" type="button" id="syncDiaryBtn">Sync Plus ☁️</button>
+          </div>
+
+          <p class="muted small" id="diarySavedMsg" role="status" aria-live="polite"></p>
+        </article>
+
+        <article class="card">
+          <h3>Le tue voci 📚</h3>
+
+          <div class="toolbar compact">
+            <label class="field">
+              <span class="field-label">Cerca</span>
+              <input id="diarySearch" type="search" placeholder="Es. ascolto, accessibilità..." autocomplete="off" />
+            </label>
+          </div>
+
+          <ul class="list" id="diaryList" role="list" aria-label="Elenco voci diario"></ul>
+
+          <div id="diaryEmpty" class="empty-state" hidden>
+            <h3>Nessuna voce</h3>
+            <p class="muted">Salva la prima nota a sinistra per iniziare. 🌱</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- QUIZ -->
+    <section class="view" id="view-quiz" data-view="quiz" aria-labelledby="quizTitle">
+      <div class="view-header">
+        <div>
+          <h2 id="quizTitle">Quiz inclusività 🎮</h2>
+          <p class="muted">Risposte semplici → suggerimenti immediati. Nessuna rete richiesta. 🌟</p>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <article class="card">
+          <h3 id="quizPromptTitle">Preparati 🚀</h3>
+          <p class="muted" id="quizSub">Seleziona l’opzione che ti sembra più inclusiva.</p>
+
+          <form id="quizForm" class="quiz">
+            <div id="quizQuestionWrap" class="quiz-question" aria-live="polite">
+              <p class="quiz-qtext" id="quizQuestion">—</p>
+              <div class="quiz-answers" id="quizAnswers"></div>
+            </div>
+
+            <div class="row">
+              <button class="btn primary" type="submit" id="quizNextBtn">Avanti ➡️</button>
+              <button class="btn" type="button" id="quizRestartBtn">Ricomincia 🔁</button>
+            </div>
+          </form>
+        </article>
+
+        <article class="card">
+          <h3>Punteggio & feedback 🌈</h3>
+          <div class="score-big" aria-live="polite">
+            <span class="score-number" id="quizScoreNumber">—</span>
+            <span class="score-max">/100</span>
+          </div>
+          <p class="justify muted" id="quizScoreText">Completa il quiz per ricevere consigli personalizzati.</p>
+
+          <div class="detail-section">
+            <h4>Consigli rapidi 💡</h4>
+            <ul class="bullets" id="quizTips"></ul>
+          </div>
+
+          <div class="detail-section">
+            <h4>Gamification 🏅</h4>
+            <p class="muted">Con Plus: badge e obiettivi (demo). </p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- NEWS -->
+    <section class="view" id="view-news" data-view="news" aria-labelledby="newsTitle">
+      <div class="view-header">
+        <div>
+          <h2 id="newsTitle">News inclusive 📰</h2>
+          <p class="muted">Scaping via proxy + fallback offline</p>
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <label class="field" style="min-width: min(520px, 100%);">
+          <span class="field-label">Query (in italiano)</span>
+          <input id="newsQuery" type="text" value="inclusione sociale accessibilità" />
+        </label>
+
+        <button class="btn primary" type="button" id="fetchNewsBtn">Scaping: ultima inclusione 🔎</button>
+        <button class="btn" type="button" id="clearNewsBtn">Pulisci 🧼</button>
+      </div>
+
+      <div class="grid-2">
+        <article class="card">
+          <h3>Ultime notizie</h3>
+          <p class="muted small" id="newsStatus">Pronto. ✅</p>
+
+          <ul class="news-list" id="newsList" role="list" aria-label="Elenco news"></ul>
+          <div id="newsEmpty" class="empty-state" hidden>
+            <h3>Nessun risultato</h3>
+            <p class="muted">Prova offline toggle in Home. 🧩</p>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>Offline (automatico) 📦</h3>
+          <p class="justify muted">
+            Se non c’è rete, usiamo il fallback offline integrato.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- FAVORITES -->
+    <section class="view" id="view-favorites" data-view="favorites" aria-labelledby="favoritesTitle">
+      <div class="view-header">
+        <div>
+          <h2 id="favoritesTitle">I tuoi preferiti ⭐</h2>
+          <p class="muted">Cerca, copia o rimuovi</p>
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <label class="field">
+          <span class="field-label">Cerca tra preferiti</span>
+          <input id="favSearch" type="search" placeholder="Es. accessibilità..." autocomplete="off" />
+        </label>
+        <button class="btn" type="button" id="favClearBtn">Svuota preferiti ♻️</button>
+      </div>
+
+      <div class="grid-2">
+        <article class="card">
+          <h3>Elenco ⭐</h3>
+          <p class="muted small" id="favCount">0 preferiti</p>
+          <ul class="news-list" id="favList" role="list" aria-label="Preferiti"></ul>
+          <div id="favEmpty" class="empty-state" hidden>
+            <h3>Nessun preferito</h3>
+            <p class="muted">Tocca ⭐ su un termine nel dizionario. 🌱</p>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>Azioni rapide 📋</h3>
+          <div class="detail-section">
+            <h4>Termine</h4>
+            <p id="favSelectedTitle" style="margin:0;font-weight:1000">—</p>
+          </div>
+          <div class="detail-section">
+            <h4>Definizione</h4>
+            <p id="favSelectedDef" class="justify muted" style="margin:0">—</p>
+          </div>
+
+          <div class="detail-actions">
+            <button class="btn primary" type="button" id="favCopyBtn">Copia 📋</button>
+            <button class="btn danger" type="button" id="favRemoveBtn">Rimuovi 🧹</button>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- PLUS -->
+    <section class="view" id="view-plus" data-view="plus" aria-labelledby="plusTitle">
+      <div class="view-header">
+        <div>
+          <h2 id="plusTitle">Ti Includo Plus 💎</h2>
+          <p class="muted">Sblocco con Stripe una tantum (demo) 🔐</p>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <article class="card">
+          <h3>Stato abbonamento 🧾</h3>
+          <p class="muted" id="plusStatus">Caricamento…</p>
+
+          <div class="row">
+            <button class="btn primary" type="button" id="stripeCheckoutBtn">Sblocca Plus 💳</button>
+            <button class="btn" type="button" id="logoutBtn">Esci 🚪</button>
+          </div>
+
+          <div class="detail-section">
+            <h4>Funzioni Plus ✅</h4>
+            <ul class="bullets" id="plusFeatures"></ul>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>Strumenti Plus 🧰</h3>
+
+          <div class="detail-section">
+            <h4>1) Dizionario esteso 📚</h4>
+            <button class="btn" type="button" id="openExtendedDictBtn">Apri</button>
+          </div>
+
+          <div class="detail-section">
+            <h4>3) Riparazione (template) 🧡</h4>
+            <button class="btn" type="button" id="openRepairTemplatesBtn">Apri</button>
+          </div>
+
+          <div class="detail-section">
+            <h4>4) Generatore inclusivo ✍️</h4>
+            <button class="btn" type="button" id="openRewriteBtn">Prova</button>
+          </div>
+
+          <div class="detail-section">
+            <h4>5) Gamification 🏅</h4>
+            <p class="muted">Badge e obiettivi.</p>
+          </div>
+
+          <div class="detail-section">
+            <h4>6) Sync ☁️</h4>
+            <button class="btn" type="button" id="syncAllBtn">Sync</button>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer" role="contentinfo">
+    <p>© <span id="year"></span> Ti Includo — imparare insieme 💛</p>
+    <p class="muted small">Offline-first • Vanilla</p>
+  </footer>
+
+  <script src="./app.js?v=<?= time(); ?>" type="module"></script>
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

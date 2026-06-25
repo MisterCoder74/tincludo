@@ -1,0 +1,16 @@
+/* manifest.webmanifest */
+{
+  "name": "Ti Includo",
+  "short_name": "Ti Includo",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#06131a",
+  "theme_color": "#2f9bff",
+  "icons": [
+    {
+      "src": "./assets/images/placeholder_horizontal.png?v=1",
+      "sizes": "512x256",
+      "type": "image/png"
+    }
+  ]
+}

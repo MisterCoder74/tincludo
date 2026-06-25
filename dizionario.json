@@ -1,0 +1,263 @@
+{
+  "version": "1.0",
+  "items": [
+    {
+      "id": "accessibilita",
+      "term": "Accessibilità",
+      "categoria": "Disabilità",
+      "isPremium": false,
+      "livello": "Base",
+      "tagline": "Progettare per includere tutte le persone",
+      "definizione": "L’accessibilità è la pratica di rendere prodotti, servizi e ambienti utilizzabili da persone con esigenze e abilità diverse, riducendo barriere e ostacoli.",
+      "esempi": [
+        "Testi con buon contrasto e dimensione leggibile",
+        "Sottotitoli per contenuti audio/video",
+        "Navigazione da tastiera e etichette chiare per i controlli"
+      ],
+      "quandoUsarlo": "Quando un’esperienza non è fruibile allo stesso modo per tutti e vuoi renderla più equa.",
+      "sinonimi": ["Progettazione per tutti", "Usabilità per tutti", "Riduzione barriere"]
+    },
+    {
+      "id": "linguaggio_inclusivo",
+      "term": "Linguaggio inclusivo",
+      "categoria": "Gender",
+      "isPremium": false,
+      "livello": "Base",
+      "tagline": "Parole che riducono esclusioni e stereotipi",
+      "definizione": "Il linguaggio inclusivo è un modo di comunicare che cerca di evitare stereotipi e di rispettare identità, ruoli e bisogni diversi.",
+      "esempi": [
+        "Usare formulazioni che non presuppongono identità/ruoli",
+        "Fare spazio a preferenze individuali quando rilevante",
+        "Evitare generalizzazioni che sminuiscono o escludono"
+      ],
+      "quandoUsarlo": "Quando scrivi o parli con gruppi diversi e vuoi promuovere rispetto e partecipazione.",
+      "sinonimi": ["Comunicazione rispettosa", "Tono inclusivo", "Riduzione stereotipi"]
+    },
+    {
+      "id": "ageismo",
+      "term": "Ageismo",
+      "categoria": "Età",
+      "isPremium": true,
+      "livello": "Intermedio",
+      "tagline": "Discriminazione basata sull'età",
+      "definizione": "L'ageismo consiste nel creare stereotipi o pregiudizi verso una persona in base alla sua età, che sia giovane o anziana.",
+      "esempi": [
+        "Pensare che una persona anziana non sappia usare la tecnologia",
+        "Escludere i giovani dai processi decisionali per 'mancanza di esperienza'",
+        "Utilizzare espressioni infantilizzanti"
+      ],
+      "quandoUsarlo": "Quando noti pregiudizi legati al ciclo di vita.",
+      "sinonimi": ["Discriminazione generazionale", "Pregiudizio d'età"]
+    },
+    {
+      "id": "neurodiversita",
+      "term": "Neurodiversità",
+      "categoria": "Disabilità",
+      "isPremium": true,
+      "livello": "Avanzato",
+      "tagline": "Variabilità naturale del cervello umano",
+      "definizione": "Il concetto di neurodiversità riconosce che differenze neurologiche come autismo, ADHD o dislessia sono variazioni naturali del cervello umano, non difetti.",
+      "esempi": [
+        "Fornire stimoli sensoriali prevedibili",
+        "Comunicare istruzioni chiare e dirette",
+        "Valorizzare stili di apprendimento differenti"
+      ],
+      "quandoUsarlo": "Quando vuoi creare ambienti o comunicazioni che rispettino le diverse modalità di elaborazione.",
+      "sinonimi": ["Neuroinclusione", "Variabilità neurologica"]
+    },
+    {
+      "id": "intersezionalita",
+      "term": "Intersezionalità",
+      "categoria": "Etnia",
+      "isPremium": true,
+      "livello": "Avanzato",
+      "tagline": "L'intreccio delle identità",
+      "definizione": "L'intersezionalità evidenzia come diverse forme di discriminazione (genere, etnia, classe, disabilità) non agiscano isolatamente, ma si intreccino creando esperienze di oppressione uniche.",
+      "esempi": [
+        "Considerare i bisogni specifici di donne appartenenti a minoranze etniche",
+        "Capire che un barriera può essere maggiore per chi accumula più discriminazioni",
+        "Analizzare politiche tenendo conto di più variabili"
+      ],
+      "quandoUsarlo": "Quando analizzi dinamiche complesse di inclusione sociale.",
+      "sinonimi": ["Intersezione delle identità", "Analisi multidimensionale"]
+    }
+    {
+      "id": "abilismo",
+      "term": "Abilismo",
+      "categoria": "Disabilità",
+      "isPremium": false,
+      "livello": "Base",
+      "tagline": "Discriminazione verso persone disabili",
+      "definizione": "Atteggiamenti o pratiche che privilegiano le persone non disabili, escludendo chi ha disabilità.",
+      "esempi": ["Assumere che la disabilità sia un limite", "Chiedere dettagli medici invasivi"],
+      "quandoUsarlo": "Quando noti assunzioni non eque sulle capacità basate sulla disabilità.",
+      "sinonimi": ["Discriminazione basata su abilità"]
+    },
+    {
+      "id": "genere_fluido",
+      "term": "Genere fluido",
+      "categoria": "Gender",
+      "isPremium": false,
+      "livello": "Base",
+      "tagline": "Identità non statica",
+      "definizione": "Persona che non si identifica in un genere binario o fisso, la cui identità può variare nel tempo.",
+      "esempi": ["Rispettare pronomi diversi", "Evitare etichette costrittive"],
+      "quandoUsarlo": "Quando parli di identità personali e rispetto delle scelte.",
+      "sinonimi": ["Genderfluid"]
+    },
+    {
+      "id": "etnocentrismo",
+      "term": "Etnocentrismo",
+      "categoria": "Etnia",
+      "isPremium": true,
+      "livello": "Intermedio",
+      "tagline": "La propria cultura come centro",
+      "definizione": "Tendenza a giudicare le altre culture basandosi esclusivamente sui valori della propria.",
+      "esempi": ["Giudicare usi alimentari altrui", "Imporre modelli occidentali come standard universali"],
+      "quandoUsarlo": "Per denunciare visioni del mondo unilaterali.",
+      "sinonimi": ["Centrismo culturale"]
+    },
+    {
+      "id": "caregiver",
+      "term": "Caregiver",
+      "categoria": "Età",
+      "isPremium": true,
+      "livello": "Intermedio",
+      "tagline": "Chi si prende cura di altri",
+      "definizione": "Persona che assiste familiari (spesso anziani) o persone con disabilità, spesso senza supporto adeguato.",
+      "esempi": ["Riconoscere il carico di cura", "Offrire supporto di sollievo"],
+      "quandoUsarlo": "Quando discuti di supporto sociale e familiare.",
+      "sinonimi": ["Assistente familiare"]
+    },
+    {
+      "id": "microaggressione",
+      "term": "Microaggressione",
+      "categoria": "Gender",
+      "isPremium": true,
+      "livello": "Avanzato",
+      "tagline": "Piccoli gesti, grande peso",
+      "definizione": "Commenti o azioni quotidiane, spesso involontari, che comunicano ostilità verso minoranze.",
+      "esempi": ["Chiedere 'ma da dove vieni davvero?'", "Interrompere sistematicamente persone di un genere specifico"],
+      "quandoUsarlo": "Per spiegare l'impatto costante di piccoli pregiudizi.",
+      "sinonimi": ["Discriminazione sottile"]
+    },
+    {
+      "id": "inclusione_digitale",
+      "term": "Inclusione digitale",
+      "categoria": "Disabilità",
+      "isPremium": false,
+      "livello": "Intermedio",
+      "tagline": "Internet per tutti",
+      "definizione": "Garantire che le tecnologie digitali siano accessibili a persone con disabilità sensoriali o cognitive.",
+      "esempi": ["Testi alternativi per immagini", "Siti navigabili da lettori di schermo"],
+      "quandoUsarlo": "Quando progetti interfacce digitali.",
+      "sinonimi": ["Accessibilità digitale"]
+    },
+    {
+      "id": "privilegio",
+      "term": "Privilegio",
+      "categoria": "Etnia",
+      "isPremium": true,
+      "livello": "Avanzato",
+      "tagline": "Vantaggi non guadagnati",
+      "definizione": "Vantaggi di cui godono alcuni gruppi sociali solo per la loro appartenenza (es. pelle bianca, maschio, non disabile).",
+      "esempi": ["Non temere per la propria incolumità", "Trovare facilità nel lavoro"],
+      "quandoUsarlo": "Per riflettere sulle dinamiche di potere in società.",
+      "sinonimi": ["Vantaggio sociale"]
+    },
+    {
+      "id": "terza_eta",
+      "term": "Terza Età",
+      "categoria": "Età",
+      "isPremium": false,
+      "livello": "Base",
+      "tagline": "Vivere la vecchiaia",
+      "definizione": "Fase avanzata della vita, spesso caricata di stereotipi legati alla produttività.",
+      "esempi": ["Coinvolgimento in attività sociali", "Ascolto delle esperienze passate"],
+      "quandoUsarlo": "Quando parli di anziani con rispetto.",
+      "sinonimi": ["Anziani"]
+    },
+    {
+      "id": "identita_di_genere",
+      "term": "Identità di genere",
+      "categoria": "Gender",
+      "isPremium": false,
+      "livello": "Base",
+      "tagline": "Sentirsi sé stessi",
+      "definizione": "Percezione profonda e personale del proprio genere, che può coincidere o meno col sesso assegnato alla nascita.",
+      "esempi": ["Rispetto del nome eletto", "Pronomi corretti"],
+      "quandoUsarlo": "Quando parli di autodeterminazione.",
+      "sinonimi": ["Soggettività di genere"]
+    },
+    {
+      "id": "comunicazione_aumentativa",
+      "term": "CAA (Comunicazione Aumentativa)",
+      "categoria": "Disabilità",
+      "isPremium": true,
+      "livello": "Avanzato",
+      "tagline": "Strumenti per chi non comunica a voce",
+      "definizione": "Insieme di tecniche e strumenti per facilitare la comunicazione in persone con disabilità complessa.",
+      "esempi": ["Tabelle con simboli", "Sintesi vocale"],
+      "quandoUsarlo": "Quando si progetta inclusione per persone non verbali.",
+      "sinonimi": ["Comunicazione facilitata"]
+    },
+    {
+      "id": "inclusione_economica",
+      "term": "Inclusione economica",
+      "categoria": "Età",
+      "isPremium": true,
+      "livello": "Intermedio",
+      "tagline": "Equità nelle opportunità",
+      "definizione": "Accesso equo a opportunità di reddito e lavoro per tutte le età e condizioni.",
+      "esempi": ["Lotta al divario salariale", "Lavoro per over 50"],
+      "quandoUsarlo": "Quando tratti di giustizia sociale ed economica.",
+      "sinonimi": ["Giustizia salariale"]
+    },
+    {
+      "id": "micro_etnie",
+      "term": "Diversità Culturale",
+      "categoria": "Etnia",
+      "isPremium": false,
+      "livello": "Base",
+      "tagline": "Valore nella pluralità",
+      "definizione": "Coesistenza di tradizioni, lingue e costumi differenti in un medesimo contesto.",
+      "esempi": ["Feste multiculturale", "Apertura culinaria"],
+      "quandoUsarlo": "Quando promuovi l'accoglienza.",
+      "sinonimi": ["Multiculturalismo"]
+    },
+    {
+      "id": "barriere_architettoniche",
+      "term": "Barriere architettoniche",
+      "categoria": "Disabilità",
+      "isPremium": false,
+      "livello": "Base",
+      "tagline": "Ostacoli fisici",
+      "definizione": "Elementi costruttivi che impediscono o limitano lo spostamento di persone con ridotta capacità motoria.",
+      "esempi": ["Scale senza rampe", "Porte strette"],
+      "quandoUsarlo": "Quando discuti di spazi pubblici.",
+      "sinonimi": ["Ostacoli fisici"]
+    },
+    {
+      "id": "alleato",
+      "term": "Alleato",
+      "categoria": "Gender",
+      "isPremium": true,
+      "livello": "Intermedio",
+      "tagline": "Supporto attivo",
+      "definizione": "Persona che, pur non appartenendo a una minoranza, sostiene attivamente i suoi diritti.",
+      "esempi": ["Intervenire contro battute omofobe", "Amplificare voci marginalizzate"],
+      "quandoUsarlo": "Quando parli di supporto tra gruppi.",
+      "sinonimi": ["Sostenitore"]
+    },
+    {
+      "id": "stereotipo_eta",
+      "term": "Stereotipo 'giovane'",
+      "categoria": "Età",
+      "isPremium": false,
+      "livello": "Base",
+      "tagline": "Bias sui giovani",
+      "definizione": "Bias che considera i giovani come 'immaturi' o 'poco affidabili'.",
+      "esempi": ["Chiedere 'cosa ne sai tu'", "Discriminazione nel lavoro"],
+      "quandoUsarlo": "Per contrastare il pregiudizio generazionale.",
+      "sinonimi": ["Pregiudizio giovanile"]
+    }

@@ -1,0 +1,250 @@
+<!-- login.html -->
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#2f9bff" />
+  <meta name="description" content="Ti Includo — Login, registrazione e reset password" />
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css?v=<?= time(); ?>" />
+  <title>Ti Includo — Accedi</title>
+</head>
+<body>
+  <a class="skip-link" href="#main">Salta al contenuto</a>
+
+  <header class="topbar" role="banner">
+    <div class="brand">
+      <div class="logo" aria-hidden="true"><span class="logo-dot"></span></div>
+      <div>
+        <h1 class="brand-title">Ti Includo ✨</h1>
+        <p class="brand-subtitle">Accedi per usare Plus 💎</p>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <div class="status" aria-live="polite">
+        <span class="status-pill" id="netPill">Online</span>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="main" role="main">
+    <section class="card" style="max-width: 720px; margin: 0 auto;">
+      <div class="view-header" style="margin-top:0;">
+        <div>
+          <h2 style="margin:0;">Benvenutə! 👋</h2>
+          <p class="muted" id="pageHint" style="margin-top:6px;">Registrati o accedi: pochi passi, linguaggio chiaro. 🌿</p>
+        </div>
+      </div>
+
+      <div class="toolbar" style="margin-top:8px;">
+        <button class="btn is-tab is-active" type="button" data-tab="login">🔐 Login</button>
+        <button class="btn is-tab" type="button" data-tab="signup">📝 Signup</button>
+        <button class="btn is-tab" type="button" data-tab="reset">🔁 Reset password</button>
+      </div>
+
+      <!-- LOGIN -->
+      <div class="tab-panel" data-panel="login">
+        <h3>Login con email e password ✅</h3>
+
+        <form id="loginForm" class="grid-form" autocomplete="on">
+          <label class="field">
+            <span class="field-label">Email</span>
+            <input name="email" type="email" placeholder="nome@esempio.it" required autocomplete="email" />
+          </label>
+
+          <label class="field">
+            <span class="field-label">Password</span>
+            <input name="password" type="password" placeholder="••••••••" required minlength="8" autocomplete="current-password" />
+          </label>
+
+          <button class="btn primary" type="submit">Accedi →</button>
+        </form>
+
+        <p class="muted" id="loginMsg" role="status" aria-live="polite" style="margin-top:12px;"></p>
+      </div>
+
+      <!-- SIGNUP -->
+      <div class="tab-panel" data-panel="signup" hidden>
+        <h3>Registrazione (nome, email, password, città) 🌍</h3>
+
+        <form id="signupForm" class="grid-form" autocomplete="on">
+          <label class="field">
+            <span class="field-label">Nome</span>
+            <input name="name" type="text" placeholder="Es. Giulia" required maxlength="60" />
+          </label>
+
+          <label class="field">
+            <span class="field-label">Email</span>
+            <input name="email" type="email" placeholder="nome@esempio.it" required autocomplete="email" />
+          </label>
+
+          <label class="field">
+            <span class="field-label">Password</span>
+            <input name="password" type="password" placeholder="Minimo 8 caratteri" required minlength="8" autocomplete="new-password" />
+          </label>
+
+          <label class="field">
+            <span class="field-label">Città</span>
+            <input name="city" type="text" placeholder="Es. Roma" required maxlength="80" />
+          </label>
+
+          <label class="check">
+            <input name="terms" type="checkbox" required />
+            <span>Accetto i termini del servizio 📄 (demo)</span>
+          </label>
+
+          <button class="btn primary" type="submit">Crea account →</button>
+        </form>
+
+        <p class="muted" id="signupMsg" role="status" aria-live="polite" style="margin-top:12px;"></p>
+      </div>
+
+      <!-- RESET -->
+      <div class="tab-panel" data-panel="reset" hidden>
+        <h3>Reset password 🔁</h3>
+        <p class="muted">Per la demo: inserisci la tua email e riceverai un messaggio di conferma. ✉️</p>
+
+        <form id="resetForm" class="grid-form">
+          <label class="field">
+            <span class="field-label">Email</span>
+            <input name="email" type="email" placeholder="nome@esempio.it" required autocomplete="email" />
+          </label>
+
+          <button class="btn primary" type="submit">Invia richiesta →</button>
+        </form>
+
+        <p class="muted" id="resetMsg" role="status" aria-live="polite" style="margin-top:12px;"></p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer" role="contentinfo">
+    <p>© <span id="year"></span> Ti Includo — imparare insieme 💛</p>
+    <p class="muted small">Login sicuro (sessione) • Vanilla</p>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+  <script>
+    // Mini JS di tab + feedback + fetch backend
+    const $ = (s, r=document) => r.querySelector(s);
+    const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
+
+    const tabs = $$('.is-tab');
+    const panels = $$('[data-panel]');
+
+    const setTab = (tab) => {
+      tabs.forEach(b => b.classList.toggle('is-active', b.dataset.tab === tab));
+      panels.forEach(p => {
+        p.hidden = p.dataset.panel !== tab;
+      });
+    };
+
+    tabs.forEach(b => b.addEventListener('click', () => setTab(b.dataset.tab)));
+
+    const setMsg = (el, text, isError=false) => {
+      el.textContent = text || '';
+      el.style.color = isError ? 'var(--warn)' : 'var(--muted)';
+    };
+
+    const appRedirect = () => { window.location.href = './dashboard.html'; };
+
+    $('#loginForm')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const msg = $('#loginMsg');
+      setMsg(msg, '', false);
+
+      const form = new FormData(e.target);
+      const email = form.get('email');
+      const password = form.get('password');
+
+      try {
+        const res = await fetch('./auth.php?action=login', {
+          method: 'POST',
+          credentials: 'same-origin',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8' },
+          body: new URLSearchParams({ email, password })
+        });
+        const data = await res.json();
+        if (!res.ok || data.error) throw new Error(data.error || 'Errore login');
+
+        setMsg(msg, 'Login riuscito ✅ Ti stiamo portando in dashboard…', false);
+        setTimeout(appRedirect, 700);
+      } catch (err) {
+        setMsg(msg, err.message || 'Errore login', true);
+      }
+    });
+
+    $('#signupForm')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const msg = $('#signupMsg');
+      setMsg(msg, '', false);
+
+      const form = new FormData(e.target);
+      const name = form.get('name');
+      const email = form.get('email');
+      const password = form.get('password');
+      const city = form.get('city');
+      const termsChecked = !!form.get('terms');
+
+      try {
+        const res = await fetch('./auth.php?action=signup', {
+          method: 'POST',
+          credentials: 'same-origin',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8' },
+          body: new URLSearchParams({
+            name,
+            email,
+            password,
+            city,
+            terms: termsChecked ? '1' : '0'
+          })
+        });
+
+        const data = await res.json();
+        if (!res.ok || data.error) throw new Error(data.error || 'Errore signup');
+
+        setMsg(msg, 'Registrazione riuscita ✅ Torniamo al login…', false);
+
+        setTimeout(() => {
+          // Richiediamo login (come richiesto) => spostiamo su tab login
+          setTab('login');
+          // se backend ha già loggato in sessione, facciamo logout per coerenza
+          fetch('./auth.php?action=logout', { method:'POST', credentials:'same-origin' }).catch(()=>{});
+        }, 900);
+      } catch (err) {
+        setMsg(msg, err.message || 'Errore signup: ' + (err.message || ''));
+      }
+    });
+
+    $('#resetForm')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const msg = $('#resetMsg');
+      setMsg(msg, '', false);
+
+      const form = new FormData(e.target);
+      const email = form.get('email');
+
+      try {
+        const res = await fetch('./auth.php?action=reset', {
+          method: 'POST',
+          credentials: 'same-origin',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8' },
+          body: new URLSearchParams({ email })
+        });
+        const data = await res.json();
+        if (!res.ok || data.error) throw new Error(data.error || 'Errore reset');
+
+        setMsg(msg, data.message || 'Richiesta inviata. Controlla la tua email. ✅', false);
+      } catch (err) {
+        setMsg(msg, err.message || 'Errore reset password', true);
+      }
+    });
+  </script>
+</body>
+</html>

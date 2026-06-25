@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Certificato di Inclusività</title>
+    <style>
+        body { font-family: sans-serif; padding: 50px; text-align: center; border: 10px solid #2f9bff; min-height: 80vh; }
+        h1 { color: #2f9bff; }
+        .score { font-size: 3rem; color: #35d07f; margin: 20px 0; }
+    </style>
+</head>
+<body>
+    <h1>Certificato di Inclusività</h1>
+    <p>Si certifica che l'utente ha raggiunto un livello di inclusività eccellente.</p>
+    <div class="score" id="userScoreDisplay">0</div>
+    <p>Data: <span id="certDate"></span></p>
+    <script>
+        document.getElementById('certDate').textContent = new Date().toLocaleDateString();
+        // In un contesto reale, il punteggio verrebbe iniettato dal server
+    </script>
+</body>
+</html>
