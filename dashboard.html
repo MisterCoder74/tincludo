@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#2f9bff" />
+  <meta name="theme-color" content="#3a9bd5" />
   <meta name="description" content="Ti Includo: dizionario di inclusività, diario personale, quiz e news in italiano. Offline-first." />
   <link rel="manifest" href="./manifest.webmanifest" />
 
@@ -30,7 +30,7 @@
       <div class="status" aria-live="polite">
         <span class="status-pill" id="netPill">Online</span>
       </div>
-      <button class="icon-btn" id="openSettingsBtn" type="button" aria-label="Apri scorciatoie">⚙️</button>
+      <button class="icon-btn" id="profiloBtn" type="button" aria-label="Profilo utente">👤</button>
     </div>
   </header>
 
@@ -40,8 +40,9 @@
     <button class="nav-item" data-view="diary" type="button">📝 Diario</button>
     <button class="nav-item" data-view="quiz" type="button">🎮 Quiz</button>
     <button class="nav-item" data-view="news" type="button">📰 News</button>
-    <button class="nav-item" data-view="plus" type="button">💎 Plus</button>
     <button class="nav-item" data-view="favorites" type="button">⭐ Preferiti</button>
+    <button class="nav-item" data-view="plus" type="button">💎 Plus</button>
+    <button class="nav-item" data-view="profilo" type="button">👤 Profilo</button>
   </nav>
 
   <main id="main" class="main" role="main">
@@ -54,6 +55,7 @@
           <p class="hero-text justify">
             Dizionario 📚, diario 📝 e quiz 🎯. News 📰 quando vuoi. Offline-first ✅
           </p>
+          <div class="rainbow-bar"></div>
 
           <div class="hero-actions">
             <a class="btn primary" href="#dictionary" data-jump="dictionary">Apri dizionario 📚</a>
@@ -72,8 +74,12 @@
             </div>
 
             <div class="card stat">
-              <p class="stat-label">Modalità offline 📴</p>
-              <p class="stat-hint">Toggle qui (non nelle news) ✅</p>
+              <p class="stat-label">Voci diario 📝</p>
+              <div class="stat-value">
+                <span id="diaryCountHome">0</span>
+                <span class="stat-unit">voci</span>
+              </div>
+              <p class="stat-hint" id="diaryHintHome">Scrivi nel diario per tracciare i tuoi progressi.</p>
             </div>
           </div>
         </div>
@@ -85,19 +91,26 @@
             <div class="art-tile t3"></div>
             <div class="art-tile t4"></div>
           </div>
-          <p class="art-caption">Ti Includo • offline-first 🧡</p>
+          <p class="art-caption">Ti Includo • inclusività per tuttə 🌈</p>
         </div>
       </div>
 
-      <div class="grid-2">
+      <div class="grid-3">
         <article class="card">
           <h3>Toggle online/offline 📴</h3>
           <p class="muted justify">
             Serve per testare come funziona l’app senza rete.
           </p>
           <div class="row">
-            <button class="btn" type="button" id="toggleOfflineBtn">Simula offline (toggle) ⛔↩️</button>
+            <button class="btn" type="button" id="toggleOfflineBtn">Simula offline ⛔</button>
           </div>
+        </article>
+
+        <article class="card">
+          <h3>Età, genere, etnia, disabilità 🌍</h3>
+          <p class="justify muted">
+            L'inclusività abbraccia ogni dimensione: età 🧓, identità di genere ⚧️, origine etnica 🌏, disabilità fisiche e mentali 🧠.
+          </p>
         </article>
 
         <article class="card">
@@ -114,7 +127,7 @@
       <div class="view-header">
         <div>
           <h2 id="dictTitle">Dizionario di inclusività 📚</h2>
-          <p class="muted">Cerca termini in italiano e salva preferiti ⭐</p>
+          <p class="muted">Cerca termini in italiano e salva preferiti ⭐ | <strong>Età · Genere · Etnia · Disabilità</strong></p>
         </div>
       </div>
 
@@ -130,6 +143,7 @@
         </label>
 
         <button class="btn" type="button" id="dictResetBtn">Reset ♻️</button>
+        <button class="btn warn" type="button" id="openExtendedDictFromDict">📚 Plus: esteso</button>
       </div>
 
       <div class="dict-layout">
@@ -186,7 +200,7 @@
       <div class="view-header">
         <div>
           <h2 id="diaryTitle">Diario personale 📝</h2>
-          <p class="muted">Scrivi, salva e rileggi: offline (localStorage). 📦</p>
+          <p class="muted">Scrivi, salva, modifica e rileggi: offline (localStorage). 📦</p>
         </div>
       </div>
 
@@ -206,13 +220,13 @@
 
           <label class="field">
             <span class="field-label">Testo</span>
-            <textarea id="diaryText" rows="10" placeholder="Cosa hai imparato? Cosa farai diversamente?" maxlength="5000"></textarea>
+            <textarea id="diaryText" rows="10" placeholder="Cosa hai imparato? Cosa farai diversamente? [Età, genere, etnia, disabilità...]" maxlength="5000"></textarea>
           </label>
 
           <div class="row">
             <button class="btn primary" type="button" id="saveDiaryBtn">Salva ✅</button>
             <button class="btn" type="button" id="clearDiaryBtn">Svuota 🧹</button>
-            <button class="btn" type="button" id="syncDiaryBtn">Sync Plus ☁️</button>
+            <button class="btn warn" type="button" id="syncDiaryBtn">☁️ Sync Plus</button>
           </div>
 
           <p class="muted small" id="diarySavedMsg" role="status" aria-live="polite"></p>
@@ -243,8 +257,16 @@
       <div class="view-header">
         <div>
           <h2 id="quizTitle">Quiz inclusività 🎮</h2>
-          <p class="muted">Risposte semplici → suggerimenti immediati. Nessuna rete richiesta. 🌟</p>
+          <p class="muted">Scegli un tema: età, genere, etnia, disabilità, sostenibilità. Nessuna rete richiesta. 🌟</p>
         </div>
+      </div>
+
+      <div class="tab-bar" id="quizTabs">
+        <button class="tab-btn is-active" data-quiz="generale">🎯 Generale</button>
+        <button class="tab-btn" data-quiz="genere">⚧️ Genere</button>
+        <button class="tab-btn" data-quiz="disabilita">♿ Disabilità</button>
+        <button class="tab-btn" data-quiz="etnia">🌏 Etnia</button>
+        <button class="tab-btn" data-quiz="sostenibilita">🌿 Sostenibilità</button>
       </div>
 
       <div class="grid-2">
@@ -280,7 +302,7 @@
 
           <div class="detail-section">
             <h4>Gamification 🏅</h4>
-            <p class="muted">Con Plus: badge e obiettivi (demo). </p>
+            <p class="muted" id="quizBadges">Completa quiz per sbloccare badge.</p>
           </div>
         </article>
       </div>
@@ -291,7 +313,7 @@
       <div class="view-header">
         <div>
           <h2 id="newsTitle">News inclusive 📰</h2>
-          <p class="muted">Scaping via proxy + fallback offline</p>
+          <p class="muted">Scaping via proxy + salva articoli offline per dopo</p>
         </div>
       </div>
 
@@ -301,8 +323,9 @@
           <input id="newsQuery" type="text" value="inclusione sociale accessibilità" />
         </label>
 
-        <button class="btn primary" type="button" id="fetchNewsBtn">Scaping: ultima inclusione 🔎</button>
+        <button class="btn primary" type="button" id="fetchNewsBtn">Scaping 🔎</button>
         <button class="btn" type="button" id="clearNewsBtn">Pulisci 🧼</button>
+        <button class="btn warn" type="button" id="viewSavedNewsBtn">📦 Salvati</button>
       </div>
 
       <div class="grid-2">
@@ -318,10 +341,17 @@
         </article>
 
         <article class="card">
-          <h3>Offline (automatico) 📦</h3>
-          <p class="justify muted">
-            Se non c’è rete, usiamo il fallback offline integrato.
-          </p>
+          <h3>Articoli salvati 📥 <span class="plus-badge" id="savedCount">0</span></h3>
+          <p class="justify muted">Salva articoli dallo scraping per leggerli offline.</p>
+          <ul class="news-list" id="savedNewsList" role="list" aria-label="Articoli salvati"></ul>
+          <div id="savedNewsEmpty" class="empty-state">
+            <h3>Nessun articolo salvato</h3>
+            <p class="muted">Clicca 💾 su un articolo per salvarlo.</p>
+          </div>
+          <div class="row" id="savedNewsActions" hidden>
+            <button class="btn danger" type="button" id="clearSavedNewsBtn">Svuota salvati 🧹</button>
+            <button class="btn" type="button" id="exportSavedBtn">Esporta 📤</button>
+          </div>
         </article>
       </div>
     </section>
@@ -389,7 +419,7 @@
 
           <div class="row">
             <button class="btn primary" type="button" id="stripeCheckoutBtn">Sblocca Plus 💳</button>
-            <button class="btn" type="button" id="logoutBtn">Esci 🚪</button>
+            <button class="btn danger" type="button" id="logoutBtn">Esci 🚪</button>
           </div>
 
           <div class="detail-section">
@@ -402,37 +432,130 @@
           <h3>Strumenti Plus 🧰</h3>
 
           <div class="detail-section">
-            <h4>1) Dizionario esteso 📚</h4>
+            <h4>📚 Dizionario esteso + aggiungi voce</h4>
             <button class="btn" type="button" id="openExtendedDictBtn">Apri</button>
           </div>
 
           <div class="detail-section">
-            <h4>3) Riparazione (template) 🧡</h4>
-            <button class="btn" type="button" id="openRepairTemplatesBtn">Apri</button>
-          </div>
-
-          <div class="detail-section">
-            <h4>4) Generatore inclusivo ✍️</h4>
+            <h4>✍️ Generatore risposta inclusiva</h4>
             <button class="btn" type="button" id="openRewriteBtn">Prova</button>
           </div>
 
           <div class="detail-section">
-            <h4>5) Gamification 🏅</h4>
-            <p class="muted">Badge e obiettivi.</p>
+            <h4>🧡 Correzione frase inclusiva</h4>
+            <button class="btn" type="button" id="openCorrectionBtn">Correggi</button>
           </div>
 
           <div class="detail-section">
-            <h4>6) Sync ☁️</h4>
+            <h4>🏅 Gamification (badge e obiettivi)</h4>
+            <button class="btn" type="button" id="openBadgesBtn">Badge</button>
+          </div>
+
+          <div class="detail-section">
+            <h4>☁️ Sync + download/upload</h4>
             <button class="btn" type="button" id="syncAllBtn">Sync</button>
+            <button class="btn" type="button" id="downloadDataBtn" style="margin-left:8px;">⬇ Scarica</button>
+            <button class="btn" type="button" id="uploadDataBtn" style="margin-left:8px;">⬆ Carica</button>
+          </div>
+
+          <div class="detail-section">
+            <h4>📜 Certificato inclusività</h4>
+            <button class="btn gold" type="button" id="downloadCertBtn">Scarica certificato 🏅</button>
           </div>
         </article>
       </div>
     </section>
+
+    <!-- PROFILE -->
+    <section class="view" id="view-profilo" data-view="profilo" aria-labelledby="profiloTitle">
+      <div class="view-header">
+        <div>
+          <h2 id="profiloTitle">Il tuo profilo 👤</h2>
+          <p class="muted">Punteggi, preferiti, personalizzazioni e voto globale d'inclusività</p>
+        </div>
+        <button class="btn danger" type="button" id="logoutBtnFromProfile">Esci 🚪</button>
+      </div>
+
+      <div class="rainbow-bar"></div>
+
+      <div class="profile-info-grid">
+        <div class="profile-stat">
+          <div style="font-size:2rem;">🌈</div>
+          <div class="profile-stat-value" id="profileGlobalScore">—</div>
+          <div class="profile-stat-label">Voto globale inclusività</div>
+        </div>
+        <div class="profile-stat">
+          <div style="font-size:2rem;">📚</div>
+          <div class="profile-stat-value" id="profileTermsCount">0</div>
+          <div class="profile-stat-label">Termini consultati</div>
+        </div>
+        <div class="profile-stat">
+          <div style="font-size:2rem;">⭐</div>
+          <div class="profile-stat-value" id="profileFavCount">0</div>
+          <div class="profile-stat-label">Preferiti</div>
+        </div>
+        <div class="profile-stat">
+          <div style="font-size:2rem;">📝</div>
+          <div class="profile-stat-value" id="profileDiaryCount">0</div>
+          <div class="profile-stat-label">Voci diario</div>
+        </div>
+        <div class="profile-stat">
+          <div style="font-size:2rem;">🎮</div>
+          <div class="profile-stat-value" id="profileQuizCount">0</div>
+          <div class="profile-stat-label">Quiz completati</div>
+        </div>
+        <div class="profile-stat">
+          <div style="font-size:2rem;">🏅</div>
+          <div class="profile-stat-value" id="profileBadges">0</div>
+          <div class="profile-stat-label">Badge sbloccati</div>
+        </div>
+      </div>
+
+      <div class="grid-2" style="margin-top:14px;">
+        <article class="card">
+          <h3>📜 Certificato di inclusività</h3>
+          <p class="muted">Scarica il certificato con il tuo voto globale.</p>
+          <div class="cert-preview">
+            <h3>Ti Includo 🌈</h3>
+            <p class="muted">Certificato di inclusività</p>
+            <div class="cert-score" id="certPreviewScore">—</div>
+            <p class="muted small" id="certPreviewDate"></p>
+          </div>
+          <div class="row">
+            <button class="btn gold" type="button" id="downloadCertFromProfile">Scarica certificato 🏅</button>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>⚙️ Personalizzazioni</h3>
+          <div class="field">
+            <span class="field-label">Alto contrasto</span>
+            <label style="display:flex;align-items:center;gap:10px;cursor:pointer;">
+              <input type="checkbox" id="highContrastToggle" />
+              <span>Attiva tema ad alto contrasto</span>
+            </label>
+          </div>
+          <div class="field" style="margin-top:10px;">
+            <span class="field-label">Tema colore</span>
+            <select id="themeSelect">
+              <option value="default">Default (arcobaleno)</option>
+              <option value="blue">Blu</option>
+              <option value="green">Verde</option>
+              <option value="purple">Viola</option>
+            </select>
+          </div>
+          <div class="row">
+            <button class="btn primary" type="button" id="profileResetBtn">Resetta statistiche</button>
+          </div>
+        </article>
+      </div>
+    </section>
+
   </main>
 
   <footer class="footer" role="contentinfo">
     <p>© <span id="year"></span> Ti Includo — imparare insieme 💛</p>
-    <p class="muted small">Offline-first • Vanilla</p>
+    <p class="muted small">Offline-first • Vanilla • Inclusività per età, genere, etnia, disabilità 🌈</p>
   </footer>
 
   <script src="./app.js?v=<?= time(); ?>" type="module"></script>

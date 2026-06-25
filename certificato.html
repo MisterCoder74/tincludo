@@ -2,21 +2,135 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>Certificato di Inclusività</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificato di Inclusività — Ti Includo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: sans-serif; padding: 50px; text-align: center; border: 10px solid #2f9bff; min-height: 80vh; }
-        h1 { color: #2f9bff; }
-        .score { font-size: 3rem; color: #35d07f; margin: 20px 0; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #0f0b1a;
+            padding: 20px;
+        }
+        .cert {
+            max-width: 700px;
+            width: 100%;
+            background: linear-gradient(145deg, #1a1228, #0f0b1a);
+            border: 4px solid transparent;
+            border-radius: 24px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 30px 80px rgba(0,0,0,.6);
+            position: relative;
+            border-image: linear-gradient(135deg, #e8444a, #e8903a, #e6c83a, #4cba6e, #3a9bd5, #7c5bb0) 1;
+        }
+        .cert::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 26px;
+            background: linear-gradient(135deg, #e8444a, #e8903a, #e6c83a, #4cba6e, #3a9bd5, #7c5bb0);
+            z-index: -1;
+            padding: 2px;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+        }
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 900;
+            background: linear-gradient(90deg, #3a9bd5, #7c5bb0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+        .subtitle {
+            color: rgba(255,255,255,.6);
+            font-weight: 600;
+            font-size: .95rem;
+            margin-bottom: 30px;
+        }
+        .rainbow {
+            height: 4px;
+            background: linear-gradient(90deg, #e8444a, #e8903a, #e6c83a, #4cba6e, #3a9bd5, #7c5bb0);
+            border-radius: 2px;
+            margin: 20px 0;
+        }
+        .cert-text {
+            color: rgba(255,255,255,.8);
+            font-size: 1.05rem;
+            line-height: 1.6;
+            margin: 20px 0;
+        }
+        .score-big {
+            font-size: 4rem;
+            font-weight: 1000;
+            color: #4cba6e;
+            margin: 20px 0;
+            text-shadow: 0 0 40px rgba(76,186,110,.3);
+        }
+        .score-label {
+            color: rgba(255,255,255,.5);
+            font-weight: 700;
+            font-size: 1rem;
+        }
+        .date {
+            color: rgba(255,255,255,.45);
+            font-size: .9rem;
+            margin-top: 30px;
+        }
+        .footer-cert {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 30px;
+            color: rgba(255,255,255,.45);
+            font-size: .85rem;
+        }
+        @media print {
+            body { background: #fff; }
+            .cert { box-shadow: none; border: 4px solid #3a9bd5; }
+            .cert::before { display: none; }
+        }
+        @media (max-width: 480px) {
+            .cert { padding: 24px; }
+            h1 { font-size: 1.3rem; }
+            .score-big { font-size: 3rem; }
+        }
     </style>
 </head>
 <body>
-    <h1>Certificato di Inclusività</h1>
-    <p>Si certifica che l'utente ha raggiunto un livello di inclusività eccellente.</p>
-    <div class="score" id="userScoreDisplay">0</div>
-    <p>Data: <span id="certDate"></span></p>
+    <div class="cert">
+        <div style="font-size:3rem;margin-bottom:10px;">🌈</div>
+        <h1>Ti Includo</h1>
+        <p class="subtitle">Certificato di Inclusività</p>
+        <div class="rainbow"></div>
+        <p class="cert-text">
+            Si certifica che l'utente ha dimostrato un impegno significativo<br>
+            verso l'inclusività, ottenendo un punteggio globale di:
+        </p>
+        <div class="score-big" id="userScoreDisplay">0</div>
+        <p class="score-label">su 100 punti</p>
+        <div class="rainbow"></div>
+        <p class="cert-text small muted">
+            L'inclusività abbraccia ogni dimensione:<br>
+            età 🧓 · genere ⚧️ · etnia 🌏 · disabilità fisiche e mentali 🧠
+        </p>
+        <p class="date" id="certDate"></p>
+        <div class="footer-cert">
+            <span>Ti Includo 🌈</span>
+            <span>inclusione per tuttə</span>
+        </div>
+    </div>
     <script>
-        document.getElementById('certDate').textContent = new Date().toLocaleDateString();
-        // In un contesto reale, il punteggio verrebbe iniettato dal server
+        document.getElementById('certDate').textContent = 'Data: ' + new Date().toLocaleDateString('it-IT', { year: 'numeric', month: 'long', day: 'numeric' });
     </script>
 </body>
 </html>

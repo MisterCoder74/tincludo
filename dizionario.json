@@ -80,7 +80,7 @@
       ],
       "quandoUsarlo": "Quando analizzi dinamiche complesse di inclusione sociale.",
       "sinonimi": ["Intersezione delle identità", "Analisi multidimensionale"]
-    }
+    },
     {
       "id": "abilismo",
       "term": "Abilismo",
@@ -261,3 +261,5 @@
       "quandoUsarlo": "Per contrastare il pregiudizio generazionale.",
       "sinonimi": ["Pregiudizio giovanile"]
     }
+  ]
+}

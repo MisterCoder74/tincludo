@@ -2,9 +2,8 @@
 <?php
 declare(strict_types=1);
 
-require_once __DIR__ . '/auth.php'; // includes session start & auth endpoints (not used directly here)
+require_once __DIR__ . '/auth.php'; // already starts session
 
-session_start();
 header('Content-Type: application/json; charset=utf-8');
 
 if (empty($_SESSION['user']['id'] ?? null)) {
@@ -45,8 +44,8 @@ try {
       'quantity' => 1,
     ]],
     'customer_email' => $email,
-    'success_url' => getenv('STRIPE_SUCCESS_URL') ?: (($_SERVER['HTTP_HOST'] ?? 'localhost') . '/plus-success.php?session_id={CHECKOUT_SESSION_ID}'),
-    'cancel_url'  => getenv('STRIPE_CANCEL_URL') ?: (($_SERVER['HTTP_HOST'] ?? 'localhost') . '/plus-cancel.php'),
+    'success_url' => getenv('STRIPE_SUCCESS_URL') ?: ('https://' . ($_SERVER['HTTP_HOST'] ?? 'localhost') . '/plus-success.php?session_id={CHECKOUT_SESSION_ID}'),
+    'cancel_url'  => getenv('STRIPE_CANCEL_URL') ?: ('https://' . ($_SERVER['HTTP_HOST'] ?? 'localhost') . '/plus-cancel.php'),
     'metadata' => [
       'userId' => $userId,
       'plan' => 'plus_one_time'

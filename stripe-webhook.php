@@ -2,7 +2,7 @@
 <?php
 declare(strict_types=1);
 
-require_once __DIR__ . '/auth.php';
+require_once __DIR__ . '/auth.php'; // already starts session
 
 if (!is_dir(__DIR__ . '/data')) mkdir(__DIR__ . '/data', 0755, true);
 
