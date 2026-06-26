@@ -292,6 +292,8 @@ function formatISODate(d) {
   const pad = n => String(n).padStart(2,"0");
   return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
 }
+
+// Carica da localStorage (sincrono, usato ovunque)
 function loadDiary() {
   try {
     const raw = localStorage.getItem(diaryKey());
@@ -300,8 +302,36 @@ function loadDiary() {
     return Array.isArray(arr) ? arr : [];
   } catch { return []; }
 }
-function saveDiary(entries) {
+
+// Carica da backend (se online) e aggiorna localStorage
+async function syncDiaryFromServer() {
+  if (!isOnline()) return;
+  try {
+    const res = await fetch('./diary-api.php?action=list', { credentials: 'same-origin', cache: 'no-store' });
+    if (!res.ok) return;
+    const data = await res.json();
+    if (data.ok && Array.isArray(data.entries)) {
+      localStorage.setItem(diaryKey(), JSON.stringify(data.entries));
+    }
+  } catch { /* offline */ }
+}
+
+// Salva su localStorage (sincrono) + backend (async)
+async function saveDiary(entries) {
+  // localStorage sempre (offline-first)
   localStorage.setItem(diaryKey(), JSON.stringify(entries));
+  
+  // Backend se online (non bloccante)
+  if (isOnline()) {
+    try {
+      await fetch('./diary-api.php?action=save', {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ entries })
+      });
+    } catch { /* offline */ }
+  }
 }
 
 function openEditVoice(id) {
@@ -455,6 +485,7 @@ function initDiaryUI() {
     const date = String(dateEl.value || "").trim();
     const title = (typeof titleEl.value === "string") ? titleEl.value.trim() : "";
     const text = (typeof textEl.value === "string") ? textEl.value.trim() : "";
+    console.log("[DIARY SAVE] title=", JSON.stringify(title), "| titleEl.value=", JSON.stringify(titleEl.value));
     if (!date || !text) {
       if (msgEl) { msgEl.textContent = "Inserisci una data e un testo prima di salvare."; msgEl.style.color = "var(--warn)"; }
       return;
@@ -1474,6 +1505,11 @@ async function init() {
   initDictionaryUI();
   initFavoritesUI();
   initDiaryUI();
+  // Carica diario dal backend (async, aggiorna localStorage)
+  syncDiaryFromServer().then(() => {
+    // Refresh UI after server sync
+    _refreshDiaryList();
+  });
   initQuizUI();
   initNewsUI();
   initPlusUI();
