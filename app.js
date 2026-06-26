@@ -356,7 +356,13 @@ function openEditVoice(id) {
   });
 }
 
+let _diaryInitialized = false;
+let _refreshDiaryList = () => {};
 function initDiaryUI() {
+  // Evita doppia inizializzazione (accumulo event listener)
+  if (_diaryInitialized) { _refreshDiaryList(); return; }
+  _diaryInitialized = true;
+
   const dateEl = $("#diaryDate");
   const titleEl = $("#diaryTitle");
   const textEl = $("#diaryText");
@@ -367,7 +373,7 @@ function initDiaryUI() {
   const emptyEl = $("#diaryEmpty");
   const searchEl = $("#diarySearch");
 
-  const refreshList = () => {
+  _refreshDiaryList = function refreshDiaryList() {
     if (!listEl) return;
     const entries = loadDiary().sort((a,b) => (b.date + ' ' + (b.createdAt||'')).localeCompare(a.date + ' ' + (a.createdAt||'')));
     const q = (searchEl?.value || "").trim().toLowerCase();
@@ -426,7 +432,7 @@ function initDiaryUI() {
         if (!confirm("Eliminare questa voce?")) return;
         const next = loadDiary().filter(x => x.id !== e.id);
         saveDiary(next);
-        refreshList();
+        _refreshDiaryList();
         toast("Voce eliminata 🧹");
       });
 
@@ -463,7 +469,7 @@ function initDiaryUI() {
     const entries = loadDiary();
     saveDiary([entry, ...entries]);
     if (msgEl) { msgEl.textContent = "Salvato ✅"; msgEl.style.color = "var(--good)"; }
-    refreshList();
+    _refreshDiaryList();
     updateProfileUI();
   });
 
@@ -474,8 +480,8 @@ function initDiaryUI() {
     if (msgEl) msgEl.textContent = "";
   });
 
-  searchEl?.addEventListener("input", refreshList);
-  refreshList();
+  searchEl?.addEventListener("input", _refreshDiaryList);
+  _refreshDiaryList();
 }
 
 /* -------------------- Quiz (multi-topic) -------------------- */
