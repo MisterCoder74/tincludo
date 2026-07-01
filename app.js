@@ -19,6 +19,27 @@ const state = {
   currentEditingDiaryId: null
 };
 
+/* Category colors mapping */
+const CAT_COLORS = {
+  'Età': 'var(--cat-eta)',
+  'Gender': 'var(--cat-genere)',
+  'Etnia': 'var(--cat-etnia)',
+  'Disabilità': 'var(--cat-disabilita)',
+  'Religione': 'var(--cat-religione)'
+};
+const CAT_CLASSES = {
+  'Età': 'cat-Età',
+  'Gender': 'cat-Gender',
+  'Etnia': 'cat-Etnia',
+  'Disabilità': 'cat-Disabilità',
+  'Religione': 'cat-Religione'
+};
+const LEVEL_PADDING = {
+  'Base': 'livello-base',
+  'Intermedio': 'livello-intermedio',
+  'Avanzato': 'livello-avanzato'
+};
+
 /* -------------------- Toast -------------------- */
 function toast(message) {
   let el = $("#toastEl");
@@ -78,6 +99,75 @@ async function loadJSON(url, fallback = null) {
   }
 }
 
+/* -------------------- Backend sync helpers -------------------- */
+async function loadFromServer(type, fallback = null) {
+  if (!isOnline()) return fallback;
+  try {
+    const res = await fetch(`./data-api.php?action=load&type=${encodeURIComponent(type)}`, { credentials: 'same-origin', cache: 'no-store' });
+    if (!res.ok) return fallback;
+    const data = await res.json();
+    return data.ok ? data.data : fallback;
+  } catch { return fallback; }
+}
+
+async function saveToServer(type, data) {
+  if (!isOnline()) return false;
+  try {
+    const res = await fetch(`./data-api.php?action=save&type=${encodeURIComponent(type)}`, {
+      method: 'POST', credentials: 'same-origin',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ data })
+    });
+    return res.ok;
+  } catch { return false; }
+}
+
+async function syncAllFromServer() {
+  // Favorites
+  const favData = await loadFromServer('favorites');
+  if (favData && Array.isArray(favData)) {
+    state.favorites = new Set(favData);
+    localStorage.setItem(favoritesKey(), JSON.stringify(favData));
+  }
+  // Quiz
+  const quizData = await loadFromServer('quiz');
+  if (quizData && quizData.score !== undefined) {
+    localStorage.setItem(quizKey(), JSON.stringify(quizData));
+  }
+  // Profile
+  const profData = await loadFromServer('profile');
+  if (profData) {
+    if (profData.termsViewed) state.profile.termsViewed = new Set(profData.termsViewed);
+    if (profData.quizCompletions) state.profile.quizCompletions = profData.quizCompletions;
+    if (profData.badges) state.profile.badges = new Set(profData.badges);
+    if (typeof profData.diaryEntriesCount === 'number') state.profile.diaryEntriesCount = profData.diaryEntriesCount;
+    if (typeof profData.globalScore === 'number') state.profile.globalScore = profData.globalScore;
+    saveProfileData();
+  }
+  // Saved news
+  const newsData = await loadFromServer('saved_news');
+  if (newsData && Array.isArray(newsData)) {
+    state.savedNews = newsData;
+    localStorage.setItem(savedNewsKey(), JSON.stringify(newsData));
+  }
+}
+
+async function syncAllToServer() {
+  saveToServer('favorites', Array.from(state.favorites));
+  const quizRaw = localStorage.getItem(quizKey());
+  if (quizRaw) {
+    try { saveToServer('quiz', JSON.parse(quizRaw)); } catch {}
+  }
+  saveToServer('profile', {
+    termsViewed: Array.from(state.profile.termsViewed),
+    quizCompletions: state.profile.quizCompletions,
+    badges: Array.from(state.profile.badges),
+    diaryEntriesCount: state.profile.diaryEntriesCount,
+    globalScore: state.profile.globalScore
+  });
+  saveToServer('saved_news', state.savedNews);
+}
+
 /* -------------------- Profile persistence -------------------- */
 function profileKey() { return "tiincludo_profile"; }
 function loadProfileData() {
@@ -100,6 +190,7 @@ function saveProfileData() {
     diaryEntriesCount: state.profile.diaryEntriesCount,
     globalScore: state.profile.globalScore
   }));
+  syncAllToServer();
 }
 
 /* -------------------- Theme persistence -------------------- */
@@ -177,6 +268,7 @@ function loadFavorites() {
 }
 function saveFavorites() {
   localStorage.setItem(favoritesKey(), JSON.stringify(Array.from(state.favorites)));
+  syncAllToServer();
 }
 
 function initFavoritesUI() {
@@ -800,7 +892,10 @@ function loadQuizResult() {
   try { const raw = localStorage.getItem(quizKey()); return raw ? JSON.parse(raw) : null; }
   catch { return null; }
 }
-function saveQuizResult(obj) { localStorage.setItem(quizKey(), JSON.stringify(obj)); }
+function saveQuizResult(obj) { 
+  localStorage.setItem(quizKey(), JSON.stringify(obj));
+  syncAllToServer();
+}
 
 function calcGlobalScore() {
   const scores = state.profile.quizCompletions.map(q => q.score).filter(s => typeof s === 'number');
@@ -819,6 +914,7 @@ function loadSavedNews() {
 }
 function saveSavedNews() {
   localStorage.setItem(savedNewsKey(), JSON.stringify(state.savedNews));
+  syncAllToServer();
 }
 
 function initNewsUI() {
@@ -1016,25 +1112,33 @@ function initDictionaryUI() {
     resultsEl.innerHTML = "";
     if (countEl) countEl.textContent = `${items.length} termine${items.length===1?"":"i"}`;
     if (items.length === 0) {
-      const li = document.createElement("li"); li.style.cursor = "default";
-      li.innerHTML = `<div style="font-weight:1000">Nessun risultato</div><div class="list-meta">Prova un'altra ricerca.</div>`;
-      resultsEl.appendChild(li); return;
+      const div = document.createElement("div");
+      div.style.cssText = "padding:20px;text-align:center;color:var(--muted);font-weight:800;";
+      div.textContent = "Nessun risultato — prova un'altra ricerca.";
+      resultsEl.appendChild(div); return;
     }
     items.forEach(item => {
-      const li = document.createElement("li"); li.setAttribute("role","listitem"); li.dataset.termId = item.id;
-      li.className = item.id === state.selectedTermId ? "is-selected" : "";
-      li.innerHTML = `<div style="font-weight:1000">${escapeHtml(item.term)}</div><div style="color:rgba(255,255,255,.70);font-weight:900;font-size:.92rem;margin-top:2px">${escapeHtml(item.categoria||"")} • ${escapeHtml(item.livello||"")}</div>`;
-      li.addEventListener("click", () => {
+      const pill = document.createElement("div");
+      const catClass = CAT_CLASSES[item.categoria] || '';
+      const levelClass = LEVEL_PADDING[item.livello] || 'livello-base';
+      pill.className = `dict-pill ${catClass} ${levelClass}`;
+      pill.dataset.termId = item.id;
+      if (item.id === state.selectedTermId) pill.classList.add('is-selected');
+      pill.innerHTML = `
+        <span class="pill-term">${escapeHtml(item.term)}</span>
+        <span class="pill-meta">${escapeHtml(item.categoria||"")} • ${escapeHtml(item.livello||"")}</span>
+      `;
+      pill.addEventListener("click", () => {
         state.selectedTermId = item.id;
-        $$("#dictResults li").forEach(x => x.classList.toggle("is-selected", x.dataset.termId === item.id));
+        $$(".dict-pill").forEach(p => p.classList.toggle("is-selected", p.dataset.termId === item.id));
         renderDetail(item);
         initFavoritesUI();
-        // Track viewed term
         state.profile.termsViewed.add(item.id);
         saveProfileData();
         updateProfileUI();
+        syncAllToServer();
       });
-      resultsEl.appendChild(li);
+      resultsEl.appendChild(pill);
     });
   };
 
@@ -1501,6 +1605,9 @@ async function init() {
       if (Array.isArray(custom)) state.dict.push(...custom);
     } catch {}
   } catch { state.dict = []; }
+
+  // Sync all data from server (user-specific)
+  try { await syncAllFromServer(); } catch {}
 
   initDictionaryUI();
   initFavoritesUI();
