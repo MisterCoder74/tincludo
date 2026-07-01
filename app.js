@@ -1613,6 +1613,32 @@ function updateProfileUI() {
 }
 
 function initProfileUI() {
+  // Load identity fields from localStorage
+  try {
+    const identity = JSON.parse(localStorage.getItem('tiincludo_identity') || '{}');
+    const pPronouns = document.getElementById('profilePronouns');
+    const pBioSex = document.getElementById('profileBioSex');
+    const pGender = document.getElementById('profileGender');
+    if (pPronouns && identity.pronouns) pPronouns.value = identity.pronouns;
+    if (pBioSex && identity.bio_sex) pBioSex.value = identity.bio_sex;
+    if (pGender && identity.gender) pGender.value = identity.gender;
+  } catch {}
+
+  // Save identity button
+  const saveIdentityBtn = document.getElementById('saveProfileIdentityBtn');
+  saveIdentityBtn?.addEventListener('click', () => {
+    const pPronouns = document.getElementById('profilePronouns');
+    const pBioSex = document.getElementById('profileBioSex');
+    const pGender = document.getElementById('profileGender');
+    const identity = {
+      pronouns: pPronouns?.value || '',
+      bio_sex: pBioSex?.value || '',
+      gender: pGender?.value || ''
+    };
+    localStorage.setItem('tiincludo_identity', JSON.stringify(identity));
+    toast('Identità salvata ✅');
+  });
+
   // High contrast toggle
   const hcToggle = $("#highContrastToggle");
   hcToggle?.addEventListener("change", () => {

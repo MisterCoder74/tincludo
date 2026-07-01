@@ -61,6 +61,9 @@ if ($action === 'signup') {
   $email = normalizeEmail((string)($_POST['email'] ?? ''));
   $password = (string)($_POST['password'] ?? '');
   $city = trim((string)($_POST['city'] ?? ''));
+  $pronouns = trim((string)($_POST['pronouns'] ?? ''));
+  $bioSex = trim((string)($_POST['bio_sex'] ?? ''));
+  $gender = trim((string)($_POST['gender'] ?? ''));
   $terms = (string)($_POST['terms'] ?? '0');
 
   if ($name === '' || mb_strlen($name) > 60) {
@@ -71,6 +74,21 @@ if ($action === 'signup') {
   if ($city === '' || mb_strlen($city) > 80) {
     http_response_code(400);
     echo json_encode(['error' => 'Città non valida.'], JSON_UNESCAPED_UNICODE);
+    exit;
+  }
+  if ($pronouns === '') {
+    http_response_code(400);
+    echo json_encode(['error' => 'Seleziona i pronomi preferiti.'], JSON_UNESCAPED_UNICODE);
+    exit;
+  }
+  if ($bioSex === '') {
+    http_response_code(400);
+    echo json_encode(['error' => 'Seleziona il sesso biologico.'], JSON_UNESCAPED_UNICODE);
+    exit;
+  }
+  if ($gender === '') {
+    http_response_code(400);
+    echo json_encode(['error' => 'Seleziona il gender percepito.'], JSON_UNESCAPED_UNICODE);
     exit;
   }
   if ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -106,6 +124,9 @@ if ($action === 'signup') {
     'name' => $name,
     'email' => $email,
     'city' => $city,
+    'pronouns' => $pronouns,
+    'bio_sex' => $bioSex,
+    'gender' => $gender,
     'password_hash' => $hash,
     'createdAt' => date('c')
   ];

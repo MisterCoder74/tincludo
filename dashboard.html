@@ -583,6 +583,38 @@
         <article class="card">
           <h3>⚙️ Personalizzazioni</h3>
           <div class="field">
+            <span class="field-label">Pronomi preferiti</span>
+            <select id="profilePronouns">
+              <option value="lei">Lei (ella)</option>
+              <option value="lui">Lui (ello)</option>
+              <option value="loro">Loro (singular they)</option>
+              <option value="qualsiasi">Qualsiasi</option>
+              <option value="non_binario">Non binario / gender neutral</option>
+              <option value="altro">Altro / Non specificato</option>
+            </select>
+          </div>
+          <div class="field" style="margin-top:10px;">
+            <span class="field-label">Sesso biologico</span>
+            <select id="profileBioSex">
+              <option value="femminile">Femminile</option>
+              <option value="maschile">Maschile</option>
+              <option value="intersex">Intersex</option>
+              <option value="non_dichiarato">Preferisco non dichiarare</option>
+            </select>
+          </div>
+          <div class="field" style="margin-top:10px;">
+            <span class="field-label">Gender percepito</span>
+            <select id="profileGender">
+              <option value="donna">Donna</option>
+              <option value="uomo">Uomo</option>
+              <option value="non_binario">Non binario</option>
+              <option value="genderfluid">Genderfluid</option>
+              <option value="agender">Agender</option>
+              <option value="altro">Altro</option>
+              <option value="non_dichiarato">Preferisco non dichiarare</option>
+            </select>
+          </div>
+          <div class="field" style="margin-top:10px;">
             <span class="field-label">Alto contrasto</span>
             <label style="display:flex;align-items:center;gap:10px;cursor:pointer;">
               <input type="checkbox" id="highContrastToggle" />
@@ -599,7 +631,8 @@
             </select>
           </div>
           <div class="row">
-            <button class="btn primary" type="button" id="profileResetBtn">Resetta statistiche</button>
+            <button class="btn primary" type="button" id="saveProfileIdentityBtn">Salva identità ✅</button>
+            <button class="btn" type="button" id="profileResetBtn">Resetta statistiche</button>
           </div>
         </article>
       </div>

@@ -69,7 +69,7 @@
 
       <!-- SIGNUP -->
       <div class="tab-panel" data-panel="signup" hidden>
-        <h3>Registrazione (nome, email, password, città) 🌍</h3>
+        <h3>Registrazione 🌍</h3>
 
         <form id="signupForm" class="grid-form" autocomplete="on">
           <label class="field">
@@ -90,6 +90,44 @@
           <label class="field">
             <span class="field-label">Città</span>
             <input name="city" type="text" placeholder="Es. Roma" required maxlength="80" />
+          </label>
+
+          <label class="field">
+            <span class="field-label">Pronomi preferiti</span>
+            <select name="pronouns" required>
+              <option value="">— Seleziona —</option>
+              <option value="lei">Lei (ella)</option>
+              <option value="lui">Lui (ello)</option>
+              <option value="loro">Loro (singular they)</option>
+              <option value="qualsiasi">Qualsiasi</option>
+              <option value="non_binario">Non binario / gender neutral</option>
+              <option value="altro">Altro / Non specificato</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span class="field-label">Sesso biologico</span>
+            <select name="bio_sex" required>
+              <option value="">— Seleziona —</option>
+              <option value="femminile">Femminile</option>
+              <option value="maschile">Maschile</option>
+              <option value="intersex">Intersex</option>
+              <option value="non_dichiarato">Preferisco non dichiarare</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span class="field-label">Gender percepito</span>
+            <select name="gender" required>
+              <option value="">— Seleziona —</option>
+              <option value="donna">Donna</option>
+              <option value="uomo">Uomo</option>
+              <option value="non_binario">Non binario</option>
+              <option value="genderfluid">Genderfluid</option>
+              <option value="agender">Agender</option>
+              <option value="altro">Altro</option>
+              <option value="non_dichiarato">Preferisco non dichiarare</option>
+            </select>
           </label>
 
           <label class="check">
@@ -190,6 +228,9 @@
       const email = form.get('email');
       const password = form.get('password');
       const city = form.get('city');
+      const pronouns = form.get('pronouns');
+      const bioSex = form.get('bio_sex');
+      const gender = form.get('gender');
       const termsChecked = !!form.get('terms');
 
       try {
@@ -198,10 +239,8 @@
           credentials: 'same-origin',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8' },
           body: new URLSearchParams({
-            name,
-            email,
-            password,
-            city,
+            name, email, password, city,
+            pronouns, bio_sex: bioSex, gender,
             terms: termsChecked ? '1' : '0'
           })
         });
