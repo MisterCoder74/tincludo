@@ -1125,7 +1125,7 @@ function initDictionaryUI() {
 
   const renderResults = (items) => {
     resultsEl.innerHTML = "";
-    if (countEl) countEl.textContent = `${items.length} termine${items.length===1?"":"i"}`;
+    if (countEl) countEl.textContent = `${items.length} ${items.length===1?"termine":"termini"}`;
     if (items.length === 0) {
       const div = document.createElement("div");
       div.style.cssText = "padding:20px;text-align:center;color:var(--muted);font-weight:800;";

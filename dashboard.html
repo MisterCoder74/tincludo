@@ -27,6 +27,7 @@
     </div>
 
     <div class="topbar-right">
+      <button class="btn gold" type="button" data-jump="plus" style="padding:6px 10px;font-size:.82rem;">⭐ Pro 3.99€</button>
       <div class="status" aria-live="polite">
         <span class="status-pill" id="netPill">Online</span>
       </div>
@@ -43,6 +44,8 @@
     <button class="nav-item" data-view="favorites" type="button">⭐ Preferiti</button>
     <button class="nav-item" data-view="plus" type="button">💎 Plus</button>
     <button class="nav-item" data-view="profilo" type="button">👤 Profilo</button>
+    <span style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;color:var(--muted-2);font-size:.82rem;font-weight:700;white-space:nowrap;border-left:1px solid rgba(255,255,255,.1);margin-left:6px;">🌈 inclusività per tuttə</span>
+    <button class="btn gold" type="button" data-jump="plus" style="padding:6px 12px;font-size:.82rem;border-radius:999px;white-space:nowrap;flex-shrink:0;">⭐ Passa a Pro 3.99€</button>
   </nav>
 
   <main id="main" class="main" role="main">
@@ -60,7 +63,7 @@
           <div class="hero-actions">
             <a class="btn primary" href="#dictionary" data-jump="dictionary">Apri dizionario 📚</a>
             <button class="btn" type="button" data-start-quiz>Fai il quiz 🎮</button>
-            <button class="btn" type="button" data-refresh-news>Scaping news 🧭</button>
+            <button class="btn" type="button" data-refresh-news>Notizie inclusive 🧭</button>
           </div>
 
           <div class="quick-stats" role="group" aria-label="Punteggio e stato">
@@ -91,7 +94,7 @@
             <div class="art-tile t3"></div>
             <div class="art-tile t4"></div>
           </div>
-          <p class="art-caption">Ti Includo • inclusività per tuttə 🌈</p>
+          <p class="art-caption">✨ imparare insieme • offline-ready</p>
         </div>
       </div>
 
@@ -323,7 +326,7 @@
           <input id="newsQuery" type="text" value="inclusione sociale accessibilità" />
         </label>
 
-        <button class="btn primary" type="button" id="fetchNewsBtn">Scaping 🔎</button>
+        <button class="btn primary" type="button" id="fetchNewsBtn">Cerca news inclusive 🔎</button>
         <button class="btn" type="button" id="clearNewsBtn">Pulisci 🧼</button>
         <button class="btn warn" type="button" id="viewSavedNewsBtn">📦 Salvati</button>
       </div>
@@ -566,7 +569,8 @@
 
   <footer class="footer" role="contentinfo">
     <p>© <span id="year"></span> Ti Includo — imparare insieme 💛</p>
-    <p class="muted small">Offline-first • Vanilla • Inclusività per età, genere, etnia, disabilità 🌈</p>
+    <p class="muted small">Offline-first • Vanilla • Inclusività per età, genere, etnia, disabilità, religione 🌈</p>
+    <button class="btn gold" type="button" data-jump="plus" style="padding:6px 12px;font-size:.82rem;">⭐ Passa a Pro 3.99€</button>
   </footer>
 
   <script src="./app.js?v=<?= time(); ?>" type="module"></script>
