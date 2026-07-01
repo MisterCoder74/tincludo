@@ -5,7 +5,7 @@ header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store, max-age=0');
 
 $query = isset($_GET['query']) ? trim((string)$_GET['query']) : 'inclusione sociale accessibilità';
-$limit = isset($_GET['limit']) ? max(1, min(20, (int)$_GET['limit'])) : 10;
+$limit = isset($_GET['limit']) ? max(1, min(20, (int)$_GET['limit'])) : 15;
 
 // Fonte generica (in italiano): Google News RSS search
 // Nota: l’endpoint può cambiare nel tempo, perciò il client ha già un fallback offline.

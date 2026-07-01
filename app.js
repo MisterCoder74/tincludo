@@ -434,6 +434,13 @@ function openEditVoice(id) {
 
   const modal = document.createElement('div');
   modal.className = 'sheet';
+  // Centered modal
+  modal.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);right:auto;';
+
+  const moodOpts = ['felice','motivato','neutro','riflessivo','stanco','frustrato'];
+  const moodLabels = {felice:'😊 Felice',motivato:'💪 Motivato/a',neutro:'😐 Neutro/a',riflessivo:'🤔 Riflessivo/a',stanco:'😴 Stanco/a',frustrato:'😤 Frustrato/a'};
+  const moodSelect = moodOpts.map(m => `<option value="${m}" ${item.mood===m?'selected':''}>${moodLabels[m]}</option>`).join('');
+
   modal.innerHTML = `
     <div class="sheet-head"><h3>Modifica voce</h3><button id="closeEdit">✕</button></div>
     <div class="sheet-body">
@@ -442,8 +449,8 @@ function openEditVoice(id) {
         <input type="date" id="editDate" value="${escapeHtml(item.date || '')}" />
       </label>
       <label class="field">
-        <span class="field-label">Titolo</span>
-        <input type="text" id="editTitle" value="${escapeHtml(item.title || '')}" style="width:100%;" />
+        <span class="field-label">Umore</span>
+        <select id="editMood">${moodSelect}</select>
       </label>
       <label class="field">
         <span class="field-label">Testo</span>
@@ -458,17 +465,17 @@ function openEditVoice(id) {
   $("#closeEdit").addEventListener("click", () => { modal.remove(); state.currentEditingDiaryId = null; });
   $("#saveEdit").addEventListener("click", () => {
     const dateIn = document.getElementById('editDate');
-    const titleIn = document.getElementById('editTitle');
+    const moodIn = document.getElementById('editMood');
     const bodyIn = document.getElementById('editBody');
-    if (!dateIn || !titleIn || !bodyIn) return;
+    if (!dateIn || !moodIn || !bodyIn) return;
     item.date = (dateIn.value || '').trim();
-    item.title = (titleIn.value || '').trim();
+    item.mood = moodIn.value || 'neutro';
     item.text = (bodyIn.value || '').trim();
     item.updatedAt = new Date().toISOString();
     saveDiary(entries);
     modal.remove();
     state.currentEditingDiaryId = null;
-    toast(`Voce aggiornata ✅ titolo: "${item.title || '(vuoto)'}"`);
+    toast("Voce aggiornata ✅");
     initDiaryUI();
   });
   $("#deleteFromEdit").addEventListener("click", () => {
@@ -519,17 +526,22 @@ function initDiaryUI() {
       li.className = "news-item";
       const rawTitle = e.title ?? "";
       const safeTitle = (typeof rawTitle === "string" && rawTitle.trim() !== "") ? rawTitle : "Voce senza titolo";
+      const moodEmoji = {felice:'😊',motivato:'💪',neutro:'😐',riflessivo:'🤔',stanco:'😴',frustrato:'😤'};
+      const moodIcon = moodEmoji[e.mood] || '😐';
       li.innerHTML = `
-        <p class="news-title">${escapeHtml(safeTitle)}</p>
-        <p class="news-meta">${escapeHtml(e.date)} • ${escapeHtml(((e.text || "").slice(0,90)).trim())}${(e.text||"").length>90?"…":""}</p>
+        <p class="news-title">${moodIcon} ${escapeHtml(e.date)}</p>
+        <p class="news-meta">${escapeHtml(((e.text || "").slice(0,120)).trim())}${(e.text||"").length>120?"…":""}</p>
       `;
       li.style.cursor = "pointer";
 
       // Click per caricare nel form
       li.addEventListener("click", () => {
-        if (dateEl) dateEl.value = e.date || "";
-        if (titleEl) titleEl.value = e.title || "";
-        if (textEl) textEl.value = e.text || "";
+        const di = document.getElementById('diaryDate');
+        const mi = document.getElementById('diaryMood');
+        const ti = document.getElementById('diaryText');
+        if (di) di.value = e.date || "";
+        if (mi) mi.value = e.mood || "neutro";
+        if (ti) ti.value = e.text || "";
         toast("Voce caricata nel form ✅");
       });
 
@@ -577,18 +589,15 @@ function initDiaryUI() {
   if (dateEl) dateEl.value = formatISODate(new Date());
 
   saveBtn?.addEventListener("click", () => {
-    // Leggi valori direttamente dal DOM (nessun closure issue)
+    // Leggi valori direttamente dal DOM
     const dateInput = document.getElementById('diaryDate');
-    const titleInput = document.getElementById('diaryTitle');
+    const moodInput = document.getElementById('diaryMood');
     const textInput = document.getElementById('diaryText');
-    if (!dateInput || !textInput || !titleInput) { toast("Errore form diario."); return; }
+    if (!dateInput || !textInput || !moodInput) { toast("Errore form diario."); return; }
 
-    const rawTitle = titleInput.value || '';
-    const title = rawTitle.trim();
     const date = (dateInput.value || '').trim();
+    const mood = moodInput.value || 'neutro';
     const text = (textInput.value || '').trim();
-
-    console.log('[DIARY SAVE] rawTitle:', JSON.stringify(rawTitle), '| trimmed:', JSON.stringify(title));
 
     if (!date || !text) {
       if (msgEl) { msgEl.textContent = "Inserisci una data e un testo prima di salvare."; msgEl.style.color = "var(--warn)"; }
@@ -598,22 +607,22 @@ function initDiaryUI() {
     const entry = {
       id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now())+Math.random().toString(16).slice(2),
       date,
-      title,
+      mood,
       text,
       createdAt: new Date().toISOString()
     };
     const entries = loadDiary();
     saveDiary([entry, ...entries]);
-    if (msgEl) { msgEl.textContent = `Salvato ✅ titolo: "${title || '(vuoto)'}"`; msgEl.style.color = "var(--good)"; }
+    if (msgEl) { msgEl.textContent = `Salvato ✅ umore: ${mood}`; msgEl.style.color = "var(--good)"; }
     _refreshDiaryList();
     updateProfileUI();
   });
 
   clearBtn?.addEventListener("click", () => {
-    const ti = document.getElementById('diaryTitle');
     const tx = document.getElementById('diaryText');
-    if (ti) ti.value = "";
+    const md = document.getElementById('diaryMood');
     if (tx) tx.value = "";
+    if (md) md.value = "neutro";
     state.currentEditingDiaryId = null;
     if (msgEl) msgEl.textContent = "";
   });
@@ -787,6 +796,29 @@ function initQuizUI() {
   state.quiz.idx = 0;
   state.quiz.answers = [];
   state.quiz.finished = false;
+
+  // Render quiz history
+  function renderQuizHistory() {
+    const historyEl = document.getElementById('quizHistory');
+    if (!historyEl) return;
+    const completions = state.profile.quizCompletions || [];
+    if (completions.length === 0) {
+      historyEl.innerHTML = '<p class="muted small">Nessun quiz completato ancora.</p>';
+      return;
+    }
+    const topicLabels = {generale:'🎯 Generale',genere:'⚧️ Genere',disabilita:'♿ Disabilità',etnia:'🌏 Etnia',sostenibilita:'🌿 Sostenibilità'};
+    const rows = completions.slice().reverse().map(q => {
+      const label = topicLabels[q.topic] || q.topic;
+      const date = q.date ? new Date(q.date).toLocaleDateString('it-IT') : '';
+      return `<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:.85rem;">
+        <span>${label}</span>
+        <span class="muted small">${date}</span>
+        <span style="font-weight:1000;color:var(--good);">${q.score}/100</span>
+      </div>`;
+    }).join('');
+    historyEl.innerHTML = rows;
+  }
+  renderQuizHistory();
 
   const existing = loadQuizResult();
   if (existing && typeof existing.score === "number" && Number.isFinite(existing.score)) {
@@ -997,7 +1029,7 @@ function initNewsUI() {
   };
 
   const doFetch = async () => {
-    const q = (queryEl?.value || "").trim() || "inclusione sociale accessibilità";
+    const q = (queryEl?.value || "").trim() || "inclusione sociale accessibilità diversità equità sostenibilità tolleranza religione";
     if (statusEl) statusEl.textContent = "Aggiornamento…";
     try {
       if (!isOnline()) {

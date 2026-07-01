@@ -217,13 +217,20 @@
           </label>
 
           <label class="field">
-            <span class="field-label">Titolo (opzionale)</span>
-            <input id="diaryTitle" type="text" placeholder="Es. Una conversazione più gentile" maxlength="80" />
+            <span class="field-label">Umore</span>
+            <select id="diaryMood">
+              <option value="felice">😊 Felice</option>
+              <option value="motivato">💪 Motivato/a</option>
+              <option value="neutro">😐 Neutro/a</option>
+              <option value="riflessivo">🤔 Riflessivo/a</option>
+              <option value="stanco">😴 Stanco/a</option>
+              <option value="frustrato">😤 Frustrato/a</option>
+            </select>
           </label>
 
           <label class="field">
             <span class="field-label">Testo</span>
-            <textarea id="diaryText" rows="10" placeholder="Cosa hai imparato? Cosa farai diversamente? [Età, genere, etnia, disabilità...]" maxlength="5000"></textarea>
+            <textarea id="diaryText" rows="10" placeholder="Cosa hai imparato? Cosa farai diversamente? [Età, genere, etnia, disabilità, religione...]" maxlength="5000"></textarea>
           </label>
 
           <div class="row">
@@ -307,6 +314,13 @@
             <h4>Gamification 🏅</h4>
             <p class="muted" id="quizBadges">Completa quiz per sbloccare badge.</p>
           </div>
+
+          <div class="detail-section">
+            <h4>Cronologia quiz 📋</h4>
+            <div id="quizHistory" style="max-height:200px;overflow-y:auto;">
+              <p class="muted small">Nessun quiz completato ancora.</p>
+            </div>
+          </div>
         </article>
       </div>
     </section>
@@ -323,7 +337,7 @@
       <div class="toolbar">
         <label class="field" style="min-width: min(520px, 100%);">
           <span class="field-label">Query (in italiano)</span>
-          <input id="newsQuery" type="text" value="inclusione sociale accessibilità" />
+          <input id="newsQuery" type="text" value="inclusione sociale accessibilità diversità equità sostenibilità tolleranza religione" />
         </label>
 
         <button class="btn primary" type="button" id="fetchNewsBtn">Cerca news inclusive 🔎</button>
