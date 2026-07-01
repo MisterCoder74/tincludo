@@ -457,14 +457,18 @@ function openEditVoice(id) {
 
   $("#closeEdit").addEventListener("click", () => { modal.remove(); state.currentEditingDiaryId = null; });
   $("#saveEdit").addEventListener("click", () => {
-    item.date = $("#editDate").value.trim();
-    item.title = $("#editTitle").value.trim();
-    item.text = $("#editBody").value.trim();
+    const dateIn = document.getElementById('editDate');
+    const titleIn = document.getElementById('editTitle');
+    const bodyIn = document.getElementById('editBody');
+    if (!dateIn || !titleIn || !bodyIn) return;
+    item.date = (dateIn.value || '').trim();
+    item.title = (titleIn.value || '').trim();
+    item.text = (bodyIn.value || '').trim();
     item.updatedAt = new Date().toISOString();
     saveDiary(entries);
     modal.remove();
     state.currentEditingDiaryId = null;
-    toast("Voce aggiornata ✅");
+    toast(`Voce aggiornata ✅ titolo: "${item.title || '(vuoto)'}"`);
     initDiaryUI();
   });
   $("#deleteFromEdit").addEventListener("click", () => {
@@ -573,15 +577,24 @@ function initDiaryUI() {
   if (dateEl) dateEl.value = formatISODate(new Date());
 
   saveBtn?.addEventListener("click", () => {
-    if (!dateEl || !textEl || !titleEl) { toast("Errore form diario."); return; }
-    const date = String(dateEl.value || "").trim();
-    const title = (typeof titleEl.value === "string") ? titleEl.value.trim() : "";
-    const text = (typeof textEl.value === "string") ? textEl.value.trim() : "";
-    console.log("[DIARY SAVE] title=", JSON.stringify(title), "| titleEl.value=", JSON.stringify(titleEl.value));
+    // Leggi valori direttamente dal DOM (nessun closure issue)
+    const dateInput = document.getElementById('diaryDate');
+    const titleInput = document.getElementById('diaryTitle');
+    const textInput = document.getElementById('diaryText');
+    if (!dateInput || !textInput || !titleInput) { toast("Errore form diario."); return; }
+
+    const rawTitle = titleInput.value || '';
+    const title = rawTitle.trim();
+    const date = (dateInput.value || '').trim();
+    const text = (textInput.value || '').trim();
+
+    console.log('[DIARY SAVE] rawTitle:', JSON.stringify(rawTitle), '| trimmed:', JSON.stringify(title));
+
     if (!date || !text) {
       if (msgEl) { msgEl.textContent = "Inserisci una data e un testo prima di salvare."; msgEl.style.color = "var(--warn)"; }
       return;
     }
+
     const entry = {
       id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now())+Math.random().toString(16).slice(2),
       date,
@@ -591,14 +604,16 @@ function initDiaryUI() {
     };
     const entries = loadDiary();
     saveDiary([entry, ...entries]);
-    if (msgEl) { msgEl.textContent = "Salvato ✅"; msgEl.style.color = "var(--good)"; }
+    if (msgEl) { msgEl.textContent = `Salvato ✅ titolo: "${title || '(vuoto)'}"`; msgEl.style.color = "var(--good)"; }
     _refreshDiaryList();
     updateProfileUI();
   });
 
   clearBtn?.addEventListener("click", () => {
-    if (titleEl) titleEl.value = "";
-    if (textEl) textEl.value = "";
+    const ti = document.getElementById('diaryTitle');
+    const tx = document.getElementById('diaryText');
+    if (ti) ti.value = "";
+    if (tx) tx.value = "";
     state.currentEditingDiaryId = null;
     if (msgEl) msgEl.textContent = "";
   });
