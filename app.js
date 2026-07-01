@@ -946,8 +946,13 @@ function saveQuizResult(obj) {
 
 function calcGlobalScore() {
   const scores = state.profile.quizCompletions.map(q => q.score).filter(s => typeof s === 'number');
-  if (scores.length === 0) return null;
-  return Math.round(scores.reduce((a,b) => a+b, 0) / scores.length);
+  const quizAvg = scores.length > 0 ? scores.reduce((a,b) => a+b, 0) / scores.length : 0;
+  const termsPct = Math.min(100, (state.profile.termsViewed.size / 25) * 100);
+  const diaryPct = Math.min(100, (state.profile.diaryEntriesCount / 20) * 100);
+  const favPct = Math.min(100, (state.favorites.size / 10) * 100);
+  // Weighted: 40% quiz, 25% terms, 20% diary, 15% favorites
+  const weighted = (quizAvg * 0.4) + (termsPct * 0.25) + (diaryPct * 0.2) + (favPct * 0.15);
+  return Math.round(weighted);
 }
 
 /* -------------------- News + Saved articles -------------------- */
@@ -1577,6 +1582,33 @@ function updateProfileUI() {
     $("#certPreviewDate").textContent = today;
   }
 
+  // Detailed stats - last 3 quizzes
+  const lastQ = document.getElementById('profileLastQuizzes');
+  if (lastQ) {
+    const qs = (state.profile.quizCompletions || []).slice(-3).reverse();
+    const topicLabels = {generale:'🎯 Generale',genere:'⚧️ Genere',disabilita:'♿ Disabilità',etnia:'🌏 Etnia',sostenibilita:'🌿 Sostenibilità'};
+    lastQ.innerHTML = qs.length ? qs.map(q => `<div style="display:flex;justify-content:space-between;padding:4px 0;font-size:.85rem;border-bottom:1px solid rgba(255,255,255,.06);"><span>${topicLabels[q.topic]||q.topic}</span><span class="muted small">${q.date?new Date(q.date).toLocaleDateString('it-IT'):''}</span><span style="font-weight:1000;color:var(--good);">${q.score}/100</span></div>`).join('') : '<p class="muted small">Nessun quiz completato.</p>';
+  }
+  // Last 3 diary entries
+  const lastD = document.getElementById('profileLastDiary');
+  if (lastD) {
+    const entries = loadDiary().slice(0, 3);
+    const moodEmoji = {felice:'😊',motivato:'💪',neutro:'😐',riflessivo:'🤔',stanco:'😴',frustrato:'😤'};
+    lastD.innerHTML = entries.length ? entries.map(e => `<div style="padding:4px 0;font-size:.85rem;border-bottom:1px solid rgba(255,255,255,.06);">${moodEmoji[e.mood]||'😐'} <span class="muted">${e.date}</span> — ${escapeHtml((e.text||'').slice(0,60))}${(e.text||'').length>60?'…':''}</div>`).join('') : '<p class="muted small">Nessuna voce diario.</p>';
+  }
+  // Last 3 saved news
+  const lastN = document.getElementById('profileLastNews');
+  if (lastN) {
+    const news = (state.savedNews || []).slice(-3).reverse();
+    lastN.innerHTML = news.length ? news.map(n => `<div style="padding:4px 0;font-size:.85rem;border-bottom:1px solid rgba(255,255,255,.06);">📰 ${escapeHtml((n.title||'').slice(0,50))}${(n.title||'').length>50?'…':''}</div>`).join('') : '<p class="muted small">Nessuna notizia salvata.</p>';
+  }
+  // Last 3 favorites
+  const lastF = document.getElementById('profileLastFavs');
+  if (lastF) {
+    const favs = state.dict.filter(d => state.favorites.has(d.id)).slice(0, 3);
+    lastF.innerHTML = favs.length ? favs.map(f => `<div style="padding:4px 0;font-size:.85rem;border-bottom:1px solid rgba(255,255,255,.06);">⭐ ${escapeHtml(f.term)} <span class="muted">(${f.categoria})</span></div>`).join('') : '<p class="muted small">Nessun preferito.</p>';
+  }
+
   saveProfileData();
 }
 
@@ -1634,6 +1666,24 @@ function wireNav() {
 
 /* -------------------- Init -------------------- */
 async function init() {
+  // Auth guard: if not logged in, redirect to login
+  try {
+    const res = await fetch('./auth.php?action=me', { credentials: 'same-origin', cache: 'no-store' });
+    if (res.ok) {
+      const data = await res.json();
+      if (!data.authed) {
+        window.location.href = './login.html';
+        return;
+      }
+    } else {
+      window.location.href = './login.html';
+      return;
+    }
+  } catch {
+    // If fetch fails, still try to load (offline mode)
+    console.warn('Auth check failed, proceeding in offline mode');
+  }
+
   wireNav();
   loadFavorites();
   loadProfileData();
